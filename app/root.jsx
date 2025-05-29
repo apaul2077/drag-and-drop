@@ -5,6 +5,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "@remix-run/react";
+import Navbar from './components/Navbar.jsx'
 
 import "./tailwind.css";
 
@@ -30,8 +31,9 @@ export function Layout({ children }) {
         <Meta />
         <Links />
       </head>
-      <body>
-        {children}
+      <body className="bg-white text-black dark:bg-zinc-900 dark:text-white">
+        <Navbar />
+        <div className="p-6 h-screen">{children}</div> 
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -40,5 +42,7 @@ export function Layout({ children }) {
 }
 
 export default function App() {
-  return <Outlet />;
+   return (
+      <Outlet/>
+  );
 }
