@@ -1,21 +1,29 @@
 export default function RightSidebar({ selectedId, forms, setForms }) {
-  const form = forms[0];
+  if (!forms?.form?.[0]?.length) {
+    return null;
+  }
+  const form = forms.form[0];
   const compIndex = form.findIndex((c) => c.id === selectedId);
   const comp = compIndex === -1 ? null : form[compIndex];
 
   function updateProp(key, value) {
-    setForms((prev) => {
-      const updated = [...prev];
-      const items = [...updated[0]];
-      items[compIndex] = {
-        ...items[compIndex],
-        props: { ...items[compIndex].props, [key]: value },
-      };
-      updated[0] = items;
-      console.log(updated);
-      return updated;
-    });
-  }
+  setForms((prev) => {
+    const updatedPages = [...prev.form];
+    const updatedComponents = [...updatedPages[0]];
+
+    updatedComponents[compIndex] = {
+      ...updatedComponents[compIndex],
+      props: { ...updatedComponents[compIndex].props, [key]: value },
+    };
+
+    updatedPages[0] = updatedComponents;
+
+    return {
+      ...prev,
+      form: updatedPages,
+    };
+  });
+}
 
   if (!comp) {
     return (

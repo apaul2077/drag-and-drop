@@ -1,156 +1,66 @@
-import { useState } from "react";
-import {
-  DndContext,
-  PointerSensor,
-  KeyboardSensor,
-  useSensor,
-  useSensors,
-  closestCorners,
-} from "@dnd-kit/core";
-import {
-  SortableContext,
-  arrayMove,
-  verticalListSortingStrategy,
-} from "@dnd-kit/sortable";
+import { useNavigate, Outlet } from "@remix-run/react";
+import { useEffect, useState } from "react";
 
-import LeftSidebar from "../components/LeftSidebar";
-import SortableComponent from "../components/SortableComponent";
-import { MainForm } from "../components/MainForm";
-import {
-  TextInput,
-  TextArea,
-  Dropdown,
-  CheckboxGroup,
-  DateInput,
-} from "../components/FormComponents";
-import RightSidebar from "../components/RightSideBar";
+export default function BuilderLayout() {
+  const navigate = useNavigate();
+  const [forms, setForms] = useState([]);
 
-const componentMap = {
-  text: TextInput,
-  textarea: TextArea,
-  dropdown: Dropdown,
-  checkbox: CheckboxGroup,
-  date: DateInput,
-};
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("forms") || "[]");
+    setForms(stored);
+  }, []);
 
-export default function Builder() {
-  const [currentSelectedComponent, setCurrentSelectedComponent] = useState(null);
-  const [forms, setForms] = useState([
-    [
-      {
-        id: "comp1",
-        type: "text",
-        props: { label: "Name", placeholder: "Enter your name" },
-      },
-      {
-        id: "comp2",
-        type: "date",
-        props: { label: "DOB" },
-      },
-    ],
-  ]);
+  const handleSelect = (e) => {
+    const id = e.target.value;
+    if (id) navigate(`/builder/${id}`);
+  };
 
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor, {
-      coordinateGetter: undefined,
-    })
-  );
+  const createNewForm = () => {
+    const newId = `form-${Date.now()}`;
+    const newForm = {
+      id: newId,
+      name: `Untitled Form`,
+      form: [[]], // Correct structure: outer array with one inner array
+      isPublsihed: false
+    };
 
-  function handleDragEnd(event) {
-    const { active, over } = event;
-    const currentItems = forms[0].map((c) => c.id);
-
-    if (
-      over &&
-      currentItems.includes(active.id) &&
-      currentItems.includes(over.id) &&
-      active.id !== over.id
-    ) {
-      setForms((prev) => {
-        const updated = [...prev];
-        const items = [...updated[0]];
-        const oldIndex = items.findIndex((c) => c.id === active.id);
-        const newIndex = items.findIndex((c) => c.id === over.id);
-        updated[0] = arrayMove(items, oldIndex, newIndex);
-        return updated;
-      });
-      return;
-    }
-
-    if (over && !currentItems.includes(active.id)) {
-      const newType = active.id;
-      const newId = `${newType}-${Date.now()}`;
-      const newComp = {
-        id: newId,
-        type: newType,
-        props: { label: newType, placeholder: ""},
-      };
-      if(newType === "checkbox" || newType === "dropdown"){
-        newComp.props = {...newComp.props, options: ["Option 1", "Option 2"]}
-      };
-
-      setForms((prev) => {
-        const updated = [...prev];
-        const items = [...updated[0]];
-        const dropIndex = items.findIndex((c) => c.id === over.id);
-        if (dropIndex === -1) {
-          items.push(newComp);
-        } else {
-          items.splice(dropIndex + 1, 0, newComp);
-        }
-        updated[0] = items;
-        return updated;
-      });
-    }
-  }
-
-
-  const renderFormComponents = (form) => (
-    <SortableContext
-      items={form.map((c) => c.id)}
-      strategy={verticalListSortingStrategy}
-    >
-      {form.map((comp) => {
-        const Component = componentMap[comp.type];
-        return (
-          <SortableComponent
-            key={comp.id}
-            id={comp.id}
-            onClick={() => setCurrentSelectedComponent(comp.id)}
-            setForms={setForms}
-          >
-            <Component {...comp.props} />
-          </SortableComponent>
-        );
-      })}
-    </SortableContext>
-  );
+    const updatedForms = [...forms, newForm];
+    setForms(updatedForms);
+    localStorage.setItem("forms", JSON.stringify(updatedForms));
+    navigate(`/builder/${newId}`);
+  };
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCorners}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="flex h-screen">
-        <LeftSidebar />
-
-        <div
-          id="main-form"
-          className="flex-1 p-4 overflow-auto bg-white dark:bg-zinc-900"
+    <div className="p-6 space-y-6">
+      {forms.length > 0 ? (
+        <select
+          onChange={handleSelect}
+          defaultValue=""
+          className="rounded border px-3 py-2 text-sm dark:bg-zinc-800 dark:text-white"
         >
-          <MainForm title="Form 1">
-            {renderFormComponents(forms[0])}
-          </MainForm>
-        </div>
+          <option value="" disabled>
+            Select a form to edit
+          </option>
+          {forms.map((form, idx) => (
+            <option key={form.id || idx} value={form.id || idx}>
+              {form.name || `Form ${idx + 1}`}
+            </option>
+          ))}
+        </select>
+      ) : (
+        <p className="text-sm text-gray-600 dark:text-gray-300">
+          No forms available. Please create one.
+        </p>
+      )}
 
-        <RightSidebar
-          selectedId={currentSelectedComponent}
-          forms={forms}
-          setForms={setForms}
-        />
-      </div>
-    </DndContext>
+      <button
+        onClick={createNewForm}
+        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm"
+      >
+        + Create New Form
+      </button>
+
+      <Outlet />
+    </div>
   );
 }

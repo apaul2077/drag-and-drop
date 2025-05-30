@@ -19,10 +19,14 @@ export default function SortableComponent({ id, children, onClick, forms, setFor
   const handleDelete = (e) => {
     e.stopPropagation();
     setForms((prev) => {
-      const updated = [...prev];
-      updated[0] = updated[0].filter((comp) => comp.id !== id);
-      return updated;
-    });
+  // copy the pages array
+  const updatedPages = [...prev.form];
+  // remove from page 0
+  updatedPages[0] = updatedPages[0].filter((comp) => comp.id !== id);
+  // return a new object
+  return { ...prev, form: updatedPages };
+});
+
   };
 
   return (
