@@ -1,52 +1,63 @@
 
 export const TextInput = ({ label, placeholder }) => {
-    const displayLabel = label ?? "Label";
-    return (
-        <div className="p-4 rounded-xl bg-gray-100 dark:bg-zinc-800 shadow-sm">
-            <label className="block text-sm font-medium mb-1 dark:text-white">{displayLabel}</label>
-            <input
-                type="text"
-                placeholder={placeholder ?? "Enter text here..."}
-                className="bg-white w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:bg-zinc-700 dark:text-white dark:border-zinc-600"
-            />
-        </div>
-    )
+  const displayLabel = label ?? "Label";
+  return (
+    <div className="p-4 rounded-xl bg-gray-100 dark:bg-zinc-800 shadow-sm">
+      <label className="w-full block text-sm font-medium mb-1 break-words text-wrap dark:text-white">
+        {displayLabel}
+      </label>
+      <input
+        type="text"
+        placeholder={placeholder ?? "Enter text here..."}
+        className="bg-white w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:bg-zinc-700 dark:text-white dark:border-zinc-600"
+      />
+    </div>
+
+  )
 
 };
 
 export const TextArea = ({ label, placeholder }) => {
-    const displayLabel = label ?? "Label";
-    return (
-        <div className="p-4 rounded-xl bg-gray-100 dark:bg-zinc-800 shadow-sm">
-            <label className="block text-sm font-medium mb-1 dark:text-white">{displayLabel}</label>
-            <textarea
-                placeholder={placeholder ?? "Enter text here..."}
-                className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 text-sm dark:bg-zinc-700 dark:text-white dark:border-zinc-600"
-                rows="4"
-            />
-        </div>
-    )
+  const displayLabel = label ?? "Label";
+  return (
+    <div className="p-4 rounded-xl bg-gray-100 dark:bg-zinc-800 shadow-sm">
+      <label className="w-full block text-sm font-medium mb-1 break-words text-wrap dark:text-white">
+        {displayLabel}
+      </label>
+      <textarea
+        placeholder={placeholder ?? "Enter text here..."}
+        className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 text-sm dark:bg-zinc-700 dark:text-white dark:border-zinc-600"
+        rows="4"
+      />
+    </div>
+  )
 };
 
-export const Dropdown = ({ label, options = ["Option 1", "Option 2"] }) => (
-    <div className="p-4 rounded-xl bg-gray-100 dark:bg-zinc-800 shadow-sm">
-        <label className="block text-sm font-medium mb-1 dark:text-white">{label}</label>
-        <select
-            className="bg-white w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:bg-zinc-700 dark:text-white dark:border-zinc-600"
-        >
-            {options.map((option, idx) => (
-                <option key={idx} value={option}>{option}</option>
-            ))}
-        </select>
-    </div>
-);
+export const Dropdown = ({ label, options = ["Option 1", "Option 2"] }) => {
+  const displayLabel = label ?? "Label";
+  return(
+  <div className="p-4 rounded-xl bg-gray-100 dark:bg-zinc-800 shadow-sm">
+    <label className="w-full block text-sm font-medium mb-1 break-words text-wrap dark:text-white">
+        {displayLabel}
+      </label>
+    <select
+      className="bg-white w-full rounded-md border border-gray-300 px-3 py-2 text-sm dark:bg-zinc-700 dark:text-white dark:border-zinc-600"
+    >
+      {options.map((option, idx) => (
+        <option key={idx} value={option}>{option}</option>
+      ))}
+    </select>
+  </div>);
+};
 
 export const CheckboxGroup = ({ label, options = ["Option 1", "Option 2"] }) => {
   const displayLabel = label ?? "Label";
 
   return (
     <div className="p-4 rounded-xl bg-gray-100 dark:bg-zinc-800 shadow-sm">
-      <p className="text-sm font-medium mb-2 dark:text-white">{displayLabel}</p>
+      <label className="w-full block text-sm font-medium mb-1 break-words text-wrap dark:text-white">
+        {displayLabel}
+      </label>
       <div className="space-y-2">
         {options.map((option, idx) => {
           const id = `checkbox-${idx}`;
@@ -87,17 +98,19 @@ export const CheckboxGroup = ({ label, options = ["Option 1", "Option 2"] }) => 
 
 
 export const DateInput = ({ label }) => {
-    const displayLabel = label ?? "Label";
+  const displayLabel = label ?? "Label";
 
-    return (
-        <div className="p-4 rounded-xl bg-gray-100 dark:bg-zinc-800 shadow-sm">
-            <label className="block text-sm font-medium mb-1 dark:text-white">{displayLabel}</label>
-            <input
-                type="date"
-                placeholder="DD/MM/YYYY"
-                className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 text-sm dark:bg-zinc-700 dark:text-white dark:border-zinc-600"
-            />
-        </div>
-    );
+  return (
+    <div className="p-4 rounded-xl bg-gray-100 dark:bg-zinc-800 shadow-sm">
+      <label className="w-full block text-sm font-medium mb-1 break-words text-wrap dark:text-white">
+        {displayLabel}
+      </label>
+      <input
+        type="date"
+        placeholder="DD/MM/YYYY"
+        className="w-full bg-white rounded-md border border-gray-300 px-3 py-2 text-sm dark:bg-zinc-700 dark:text-white dark:border-zinc-600"
+      />
+    </div>
+  );
 };
 

@@ -1,9 +1,9 @@
 import { useTheme } from "../hooks/useTheme.js";
 import { Link } from "@remix-run/react";
+import { useState } from "react";
 
 export default function Navbar() {
   const { isDark, toggleTheme } = useTheme();
-
   return (
     <nav className="flex items-center justify-between px-6 py-4 shadow-md dark:bg-zinc-900 bg-white">
       <h1 className="text-xl font-bold dark:text-white">FormBuilder</h1>

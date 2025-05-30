@@ -23,6 +23,7 @@ import {
   CheckboxGroup,
   DateInput,
 } from "../components/FormComponents";
+import RightSidebar from "../components/RightSideBar";
 
 const componentMap = {
   text: TextInput,
@@ -33,6 +34,7 @@ const componentMap = {
 };
 
 export default function Builder() {
+  const [currentSelectedComponent, setCurrentSelectedComponent] = useState(null);
   const [forms, setForms] = useState([
     [
       {
@@ -51,54 +53,57 @@ export default function Builder() {
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
-      coordinateGetter: undefined, 
+      coordinateGetter: undefined,
     })
   );
 
   function handleDragEnd(event) {
-  const { active, over } = event;
-  const currentItems = forms[0].map((c) => c.id);
+    const { active, over } = event;
+    const currentItems = forms[0].map((c) => c.id);
 
-  if (
-    over &&
-    currentItems.includes(active.id) &&
-    currentItems.includes(over.id) &&
-    active.id !== over.id
-  ) {
-    setForms((prev) => {
-      const updated = [...prev];
-      const items = [...updated[0]];
-      const oldIndex = items.findIndex((c) => c.id === active.id);
-      const newIndex = items.findIndex((c) => c.id === over.id);
-      updated[0] = arrayMove(items, oldIndex, newIndex);
-      return updated;
-    });
-    return;
+    if (
+      over &&
+      currentItems.includes(active.id) &&
+      currentItems.includes(over.id) &&
+      active.id !== over.id
+    ) {
+      setForms((prev) => {
+        const updated = [...prev];
+        const items = [...updated[0]];
+        const oldIndex = items.findIndex((c) => c.id === active.id);
+        const newIndex = items.findIndex((c) => c.id === over.id);
+        updated[0] = arrayMove(items, oldIndex, newIndex);
+        return updated;
+      });
+      return;
+    }
+
+    if (over && !currentItems.includes(active.id)) {
+      const newType = active.id;
+      const newId = `${newType}-${Date.now()}`;
+      const newComp = {
+        id: newId,
+        type: newType,
+        props: { label: newType, placeholder: ""},
+      };
+      if(newType === "checkbox" || newType === "dropdown"){
+        newComp.props = {...newComp.props, options: ["Option 1", "Option 2"]}
+      };
+
+      setForms((prev) => {
+        const updated = [...prev];
+        const items = [...updated[0]];
+        const dropIndex = items.findIndex((c) => c.id === over.id);
+        if (dropIndex === -1) {
+          items.push(newComp);
+        } else {
+          items.splice(dropIndex + 1, 0, newComp);
+        }
+        updated[0] = items;
+        return updated;
+      });
+    }
   }
-
-  if (over && !currentItems.includes(active.id)) {
-    const newType = active.id;
-    const newId = `${newType}-${Date.now()}`;
-    const newComp = {
-      id: newId,
-      type: newType,
-      props: { label: newType, placeholder: "" },
-    };
-
-    setForms((prev) => {
-      const updated = [...prev];
-      const items = [...updated[0]];
-      const dropIndex = items.findIndex((c) => c.id === over.id);
-      if (dropIndex === -1) {
-        items.push(newComp);
-      } else {
-        items.splice(dropIndex + 1, 0, newComp);
-      }
-      updated[0] = items;
-      return updated;
-    });
-  }
-}
 
 
   const renderFormComponents = (form) => (
@@ -109,7 +114,12 @@ export default function Builder() {
       {form.map((comp) => {
         const Component = componentMap[comp.type];
         return (
-          <SortableComponent key={comp.id} id={comp.id}>
+          <SortableComponent
+            key={comp.id}
+            id={comp.id}
+            onClick={() => setCurrentSelectedComponent(comp.id)}
+            setForms={setForms}
+          >
             <Component {...comp.props} />
           </SortableComponent>
         );
@@ -135,9 +145,11 @@ export default function Builder() {
           </MainForm>
         </div>
 
-        <div className="w-1/5 bg-gray-100 dark:bg-zinc-800 p-4">
-          Properties
-        </div>
+        <RightSidebar
+          selectedId={currentSelectedComponent}
+          forms={forms}
+          setForms={setForms}
+        />
       </div>
     </DndContext>
   );
