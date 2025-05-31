@@ -14,7 +14,7 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 
-import LeftSidebar from "../components/LeftSidebar";
+import LeftSidebar from "../components/LeftSideBar";
 import SortableComponent from "../components/SortableComponent";
 import { MainForm } from "../components/MainForm";
 import {
