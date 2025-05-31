@@ -39,7 +39,7 @@ export default function RightSidebar({ selectedId, forms, setForms }) {
   const { label = "", placeholder = "", options = [], required = false, helpText = "", minLength = "", maxLength = "", inputType = "text" } = props;
 
   return (
-    <div className="w-64 bg-gray-50 dark:bg-zinc-800 p-4 space-y-4 overflow-auto">
+    <div className="w-64 bg-gray-50 dark:bg-zinc-800 p-4 space-y-4 overflow-auto rounded-md">
       <h2 className="text-lg font-semibold dark:text-white">Field Properties</h2>
 
       <div>

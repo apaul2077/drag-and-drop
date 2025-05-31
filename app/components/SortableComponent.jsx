@@ -32,7 +32,7 @@ export default function SortableComponent({ id, children, onClick, forms, setFor
   return (
     <div
       style={style}
-      className="mb-4 relative bg-white dark:bg-zinc-700 p-4 rounded-3xl shadow group"
+      className="mb-4 relative bg-white dark:bg-zinc-700 p-1 rounded-xl shadow group"
       onPointerDownCapture={() => onClick?.(id)}
     >
       {/* Delete Icon */}

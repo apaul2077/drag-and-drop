@@ -29,13 +29,14 @@ function DraggableItem({ id, label }) {
 
 export default function LeftSidebar() {
   return (
-    <div className="w-64 bg-gray-100 dark:bg-zinc-800 p-4 border-r border-gray-300 dark:border-zinc-700 flex flex-col rounded-md">
+    <div className="w-64 bg-gray-100 dark:bg-zinc-800 p-4 border-gray-300 dark:border-zinc-700 flex flex-col rounded-md">
       <h2 className="text-lg font-semibold mb-4 dark:text-white">Components</h2>
       <div className="flex flex-col gap-3">
         {DRAGGABLE_COMPONENTS.map((item) => (
           <DraggableItem key={item.id} id={item.id} label={item.label} />
         ))}
       </div>
+      <div className="mt-2 text-sm "> Start by dragging a component to the form</div>
     </div>
   );
 }

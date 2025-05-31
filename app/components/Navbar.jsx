@@ -6,12 +6,11 @@ export default function Navbar() {
   const { isDark, toggleTheme } = useTheme();
   return (
     <nav className="flex items-center justify-between px-6 py-4 shadow-md dark:bg-zinc-900 bg-white">
-      <h1 className="text-xl font-bold dark:text-white">FormBuilder</h1>
+      <Link to="/" className="text-xl font-bold dark:text-white">FormBuilder</Link>
       <div className="flex items-center gap-6">
         <div className="flex gap-4">
           <Link to="/builder">Builder</Link>
           <Link to="/preview">Preview</Link>
-          <Link to="/published">Published</Link>
         </div>
         <button
           onClick={toggleTheme}

@@ -1,7 +1,7 @@
 import { useNavigate, Outlet } from "@remix-run/react";
 import { useEffect, useState } from "react";
 
-export default function BuilderLayout() {
+export default function PreviewLayout() {
   const navigate = useNavigate();
   const [forms, setForms] = useState([]);
 
@@ -12,22 +12,7 @@ export default function BuilderLayout() {
 
   const handleSelect = (e) => {
     const id = e.target.value;
-    if (id) navigate(`/builder/${id}`);
-  };
-
-  const createNewForm = () => {
-    const newId = `form-${Date.now()}`;
-    const newForm = {
-      id: newId,
-      name: `Untitled Form`,
-      form: [[]], // Correct structure: outer array with one inner array
-      isPublsihed: false
-    };
-
-    const updatedForms = [...forms, newForm];
-    setForms(updatedForms);
-    localStorage.setItem("forms", JSON.stringify(updatedForms));
-    navigate(`/builder/${newId}`);
+    if (id) navigate(`/preview/${id}`);
   };
 
   return (
@@ -36,7 +21,7 @@ export default function BuilderLayout() {
         <select
           onChange={handleSelect}
           defaultValue=""
-          className="rounded border bg-white m-1 px-3 py-2 text-sm dark:bg-zinc-800 dark:text-white"
+          className="rounded border px-3 py-2 text-sm dark:bg-zinc-800 dark:text-white bg-white mr-2"
         >
           <option value="" disabled>
             Select a form to edit
@@ -52,13 +37,6 @@ export default function BuilderLayout() {
           No forms available. Please create one.
         </p>
       )}
-
-      <button
-        onClick={createNewForm}
-        className="bg-blue-700 hover:bg-blue-800 text-white px-4 py-2 rounded text-sm"
-      >
-        + Create New Form
-      </button>
 
       <Outlet />
     </div>

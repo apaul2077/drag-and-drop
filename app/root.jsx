@@ -31,9 +31,9 @@ export function Layout({ children }) {
         <Meta />
         <Links />
       </head>
-      <body className="bg-white text-black dark:bg-zinc-900 dark:text-white">
+      <body className="bg-white text-black dark:bg-zinc-900 dark:text-white h-full">
         <Navbar />
-        <div className="p-6 h-screen">{children}</div> 
+        {children}
         <ScrollRestoration />
         <Scripts />
       </body>
